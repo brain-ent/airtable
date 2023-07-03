@@ -1,0 +1,11 @@
+.git
+.idea
+.azureml
+.DS_Store
+inference_app
+docs
+tests
+experiment-*
+__pycache__/
+.pytest_cache
+trained_models

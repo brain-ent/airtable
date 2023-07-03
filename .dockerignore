@@ -1,0 +1,9 @@
+.git
+.idea
+.azureml
+aptos_data
+artifacts
+tfrecords_small
+experiment-*
+__pycache__/
+tmp-database/
