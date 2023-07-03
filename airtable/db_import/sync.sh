@@ -1,0 +1,1 @@
+PYTHONPATH=../.. ./synchronizer.py --config_path ./synchronizer_config.json

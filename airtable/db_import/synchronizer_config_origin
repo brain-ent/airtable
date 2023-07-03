@@ -1,0 +1,27 @@
+{
+  "airtable_configuration": {
+    "api_key": "patnPgPWgcjahOvEq.00831039e5474b446827623d2019f8dc236f5bd73eabc7cc95d7892d82b3a23b",
+    "database_id": "appLe3hdiQM7mYaiP",
+    "products_table_id": "tblhzrm5f1R74Hcw7",
+    "product_codes_table_id": "tblVihc7RBt5bwjI1"
+  },
+  "postgres_db_configuration": {
+    "db_host": "localhost",
+    "db_port": 5433,
+    "db_user": "postgres",
+    "db_password": "postgres",
+    "db_name": "airtable_cache"
+  },
+  "thumbnails_configuration": {
+    "size": [
+      300,
+      300
+    ],
+    "temp_loading_dir_path": "./temp",
+    "resized_images_dir_path": "./pics"
+  },
+  "logger_configuration": {
+    "filename": "airtable_synchronizer.log",
+    "log_level": "INFO"
+  }
+}
