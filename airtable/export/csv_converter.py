@@ -1,10 +1,11 @@
 import csv
+from typing import List
 
 from airtable.export.data.export_record_model import ExportRecordModel
 from airtable.export.test_data_generator import generate_mock_data_for_airtable
 
 
-def export_to_csv(records: list[ExportRecordModel]):
+def export_to_csv(records: List[ExportRecordModel]):
     with open('dataset_info.csv', 'w', newline='') as csvfile:
         header = records[0].get_csv_header()
         writer = csv.DictWriter(csvfile, fieldnames=header, quoting=csv.QUOTE_NONNUMERIC)

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 
 @dataclass
@@ -36,7 +37,7 @@ class LoggerConfig:
 class ThumbnailsConfig:
     class Meta:
         ordered = True
-    size: tuple[int, int] = (300, 300)
+    size: Tuple[int, int] = (300, 300)
     temp_loading_dir_path: str = "./temp"
     resized_images_dir_path: str = "./pics"
 

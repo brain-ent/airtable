@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 from random_word import RandomWords
 
@@ -8,7 +9,7 @@ word_generator = RandomWords()
 
 
 def generate_mock_data_for_airtable(count: int):
-    records: list[ExportRecordModel] = []
+    records: List[ExportRecordModel] = []
     for i in range(0, count):
         record = ExportRecordModel()
         set_name_and_code(record)

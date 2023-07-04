@@ -18,3 +18,4 @@ airtable/db_import/temp
 airtable/db_import/synchronizer_config
 airtable/test.py
 airtable/db_import/synchronizer_config.json
+/airtable_synchronizer.log

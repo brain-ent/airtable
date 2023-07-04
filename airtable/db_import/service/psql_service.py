@@ -1,4 +1,5 @@
 import logging
+from typing import Dict
 
 from peewee import PostgresqlDatabase
 
@@ -33,7 +34,7 @@ class PostgresDBService:
         self.cache_database.drop_tables([StoreProductCode, Product, Thumbnail])
         self.cache_database.create_tables([Thumbnail, Product, StoreProductCode])
 
-    def count_of_records(self) -> dict[str, int]:
+    def count_of_records(self) -> Dict[str, int]:
         result = dict(
             products=len(Product.select()),
             sigale_product_codes=len(StoreProductCode.select()),

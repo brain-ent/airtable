@@ -1,26 +1,28 @@
 from dataclasses import dataclass
-
+from typing import Tuple, List
 from urllib3.util import Url
+
 
 @dataclass
 class AirtableThumbnail:
     record_id: str
 
     name: str
-    shape: tuple[int, int]
+    shape: Tuple[int, int]
     url: Url
 
     def __init__(self):
         pass
 
+
 @dataclass
 class StoreCode:
     record_id: str
-
     name: str
 
     def __init__(self):
         pass
+
 
 @dataclass
 class ImportRecordModel:
@@ -31,7 +33,7 @@ class ImportRecordModel:
     status: str
     comments: str
     status_photoset: str
-    store_codes: list[StoreCode]
+    store_codes: List[StoreCode]
     dataset_code: str
     photoset: Url
     amount_of_images: int

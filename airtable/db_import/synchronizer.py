@@ -1,6 +1,7 @@
 import logging
 import sys
 from logging.handlers import TimedRotatingFileHandler
+from typing import List
 
 import fire
 
@@ -21,7 +22,7 @@ def upload_to_cache(app_config: AppConfig):
     thumbnails_loader = ThumbnailsLoader(app_config)
 
     store_codes_dict = airtable_sync_service.get_all_store_codes()
-    products: list[ImportRecordModel] = airtable_sync_service.get_all_products(store_codes_dict)
+    products: List[ImportRecordModel] = airtable_sync_service.get_all_products(store_codes_dict)
 
     postgres_db_service.create_tables()
 
@@ -49,18 +50,21 @@ def app_startup(config_path: str):
     app_config = config_manager.load()
     if app_config is None:
         logging.critical(f"Could not read configuration file: {config_path}")
-        return
-    logging.basicConfig(encoding='utf-8',
-                        level=app_config.logger_configuration.log_level,
-                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        handlers=[
-                            logging.StreamHandler(sys.stdout),
-                            TimedRotatingFileHandler(filename=app_config.logger_configuration.filename,
-                                                     when='D',
-                                                     interval=1,
-                                                     backupCount=10
-                                                     )])
+        exit(1)
+    logging.basicConfig(
+        level=app_config.logger_configuration.log_level,
+        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            TimedRotatingFileHandler(
+                filename=app_config.logger_configuration.filename,
+                when='D',
+                interval=1,
+                backupCount=10
+            )
+        ]
+    )
     logging.getLogger('PIL').setLevel(logging.ERROR)
     upload_to_cache(app_config=app_config)
     # images_loading_test(app_config=app_config)

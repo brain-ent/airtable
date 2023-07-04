@@ -19,6 +19,7 @@ THUMBNAIL_TABLE_NAME = 'thumbnail'
 
 _logger = logging.getLogger("Repository")
 
+
 class Thumbnail(Model):
     RecordId = CharField(primary_key=True)
     Name = CharField()
@@ -53,9 +54,9 @@ class Thumbnail(Model):
 class Product(Model):
     RecordId = CharField(primary_key=True)
 
-    Name = CharField()
-    DatasetCode = CharField()
-    AmountOfImages = IntegerField()
+    Name = CharField(null=True)
+    DatasetCode = CharField(null=True)
+    AmountOfImages = IntegerField(null=True)
     Thumbnail = ForeignKeyField(Thumbnail, null=True)
 
     class Meta:
