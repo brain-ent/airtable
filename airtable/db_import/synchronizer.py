@@ -1,4 +1,6 @@
 import logging
+import os.path
+import shutil
 import sys
 from logging.handlers import TimedRotatingFileHandler
 from typing import List
@@ -45,12 +47,14 @@ def images_loading_test(app_config):
     ThumbnailsLoader(app_config).multithread_load()
 
 
-def app_startup(config_path: str):
+def synchronizer(config_path: str):
     config_manager = ConfigManager(config_path)
     app_config = config_manager.load()
     if app_config is None:
         logging.critical(f"Could not read configuration file: {config_path}")
         exit(1)
+    log_dir = os.path.dirname(app_config.logger_configuration.filename)
+    os.makedirs(log_dir, exist_ok=True)
     logging.basicConfig(
         level=app_config.logger_configuration.log_level,
         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
@@ -66,9 +70,18 @@ def app_startup(config_path: str):
         ]
     )
     logging.getLogger('PIL').setLevel(logging.ERROR)
+    if app_config.thumbnails_configuration.clean_on_startup:
+        # Clean old images if any
+        if os.path.isdir(app_config.thumbnails_configuration.temp_loading_dir_path):
+            shutil.rmtree(app_config.thumbnails_configuration.temp_loading_dir_path)
+        if os.path.isdir(app_config.thumbnails_configuration.resized_images_dir_path):
+            shutil.rmtree(app_config.thumbnails_configuration.resized_images_dir_path)
+        os.makedirs(app_config.thumbnails_configuration.temp_loading_dir_path, exist_ok=True)
+        os.makedirs(app_config.thumbnails_configuration.resized_images_dir_path, exist_ok=True)
+    # Start the main import to cache
     upload_to_cache(app_config=app_config)
     # images_loading_test(app_config=app_config)
 
 
 if __name__ == '__main__':
-    fire.Fire(app_startup)
+    fire.Fire(synchronizer)

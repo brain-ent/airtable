@@ -41,6 +41,7 @@ class ThumbnailsConfig:
     format: str = 'png'
     temp_loading_dir_path: str = "/tmp/airtable/temp"
     resized_images_dir_path: str = "/tmp/airtable/pics"
+    clean_on_startup: bool = True
 
 
 @dataclass
