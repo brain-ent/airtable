@@ -1,7 +1,9 @@
 import logging
+import os.path
 import traceback
 from multiprocessing.pool import Pool
 from pathlib import Path
+from typing import Union
 
 import wget
 from PIL import Image
@@ -19,10 +21,11 @@ class ThumbnailsLoader:
         self.app_config = app_config
         self.config = app_config.thumbnails_configuration
 
-    def resize_image(self, src: Path, dst: Path):
+    def resize_image(self, src: Union[Path, str], dst: Union[Path, str]):
         image = Image.open(src)
         resized_image = image.resize(self.config.size, Image.ADAPTIVE)
         resized_image.save(fp=dst)
+        os.unlink(src)
         self._logger.debug(f"{dst} saved")
 
     def load(self):
@@ -41,6 +44,7 @@ class ThumbnailsLoader:
 
             image_temp_path = f"{self.config.temp_loading_dir_path}/{thumbnail.Name}"
             resized_image_path = Path(f"{self.config.resized_images_dir_path}/{thumbnail.Name}")
+            resized_image_path = os.path.splitext(resized_image_path)[0] + '.' + self.config.format
 
             response = wget.download(thumbnail.Url, image_temp_path)
             self.resize_image(Path(response), resized_image_path)
