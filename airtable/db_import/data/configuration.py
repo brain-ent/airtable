@@ -29,7 +29,7 @@ class PostgresDbConfig:
 class LoggerConfig:
     class Meta:
         ordered = True
-    filename: str = 'airtable_synchronizer.log'
+    filename: str = '/tmp/airtable/synchronizer.log'
     log_level: str = 'INFO'
 
 
@@ -38,8 +38,9 @@ class ThumbnailsConfig:
     class Meta:
         ordered = True
     size: Tuple[int, int] = (300, 300)
-    temp_loading_dir_path: str = "./temp"
-    resized_images_dir_path: str = "./pics"
+    format: str = 'png'
+    temp_loading_dir_path: str = "/tmp/airtable/temp"
+    resized_images_dir_path: str = "/tmp/airtable/pics"
 
 
 @dataclass
