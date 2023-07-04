@@ -99,7 +99,8 @@ class Product(Model):
 class StoreProductCode(Model):
     RecordId = CharField(primary_key=True)
 
-    Name = CharField()
+    Code = CharField()
+    UD = CharField(null=True)
     Product = ForeignKeyField(Product, null=True)
 
     class Meta:
@@ -111,7 +112,8 @@ class StoreProductCode(Model):
 
         saved_store_code = StoreProductCode.create(
             RecordId=airtable_store_code.record_id,
-            Name=airtable_store_code.name,
+            Code=airtable_store_code.name,
+            UD=airtable_store_code.ud,
             Product=product_id)
 
         _logger.debug(f"Saved Sigale code: {saved_store_code}")

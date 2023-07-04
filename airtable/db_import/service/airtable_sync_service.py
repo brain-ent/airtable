@@ -55,7 +55,7 @@ class AirtableSyncService:
         thumbnail.record_id = thumbnail_dto['id']
         thumbnail.name = thumbnail_dto['filename']
 
-        temp_thumbnail = thumbnail_dto['thumbnails']['large']
+        temp_thumbnail = thumbnail_dto['thumbnails']['full']
         thumbnail.shape = (temp_thumbnail['width'], temp_thumbnail['height'])
         thumbnail.url = temp_thumbnail['url']
         return thumbnail
@@ -115,6 +115,7 @@ class AirtableSyncService:
 
         store_code.record_id = record_id
         store_code.name = record_fields.get("Code", None)
+        store_code.ud = record_fields.get("UD", None)
         if store_code.name is None:
             return None
         else:
@@ -127,11 +128,11 @@ class AirtableSyncService:
         _logger.info("Loading codes from `Products` table...")
         store_codes_dto: List[Dict] = self.products_code_table.all()
         _logger.debug(
-            f'There is {len(store_codes_dto)} records in products code table'
+            f'There is {len(store_codes_dto)} records in `products_code_table`'
         )
         debug_num = 3
         _logger.debug(
-            f'First {debug_num} records of products code table: '
+            f'First {debug_num} records of `products_code_table`: '
             f'{store_codes_dto[:debug_num]}'
         )
         store_codes_by_record_id: Dict[str, StoreCode] = dict()
@@ -148,7 +149,11 @@ class AirtableSyncService:
     def get_all_products(self, store_codes_dict: Dict[str, StoreCode]) -> List[ImportRecordModel]:
         _logger.info("Load dataset products")
         records_dto_list = self.products_table.all()
-
+        debug_num = 3
+        _logger.debug(
+            f'First records {debug_num} of `products_table`: '
+            f'{records_dto_list[:debug_num]}'
+        )
         records: List[ImportRecordModel] = []
 
         for record_dto in records_dto_list:

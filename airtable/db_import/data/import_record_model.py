@@ -6,7 +6,6 @@ from urllib3.util import Url
 @dataclass
 class AirtableThumbnail:
     record_id: str
-
     name: str
     shape: Tuple[int, int]
     url: Url
@@ -19,6 +18,7 @@ class AirtableThumbnail:
 class StoreCode:
     record_id: str
     name: str
+    ud: str
 
     def __init__(self):
         pass
@@ -27,7 +27,6 @@ class StoreCode:
 @dataclass
 class ImportRecordModel:
     record_id: str
-
     name: str
     thumbnail: AirtableThumbnail
     status: str
