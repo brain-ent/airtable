@@ -39,7 +39,7 @@ class ThumbnailsLoader:
         for sc in store_codes:
             sc: StoreProductCode
             link_target = Path(self.config.image_links_by_store_code) / f'{sc.Code}.{self.config.format}'
-            os.symlink(resized_image_path, link_target)
+            os.link(resized_image_path, link_target)
 
     def load(self):
 
