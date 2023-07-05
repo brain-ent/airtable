@@ -47,12 +47,17 @@ def images_loading_test(app_config):
     ThumbnailsLoader(app_config).multithread_load()
 
 
-def synchronizer(config_path: str):
+def synchronizer(
+        config_path: str,
+        download_images_only: bool = False
+):
     config_manager = ConfigManager(config_path)
     app_config = config_manager.load()
     if app_config is None:
         logging.critical(f"Could not read configuration file: {config_path}")
         exit(1)
+    # Update new default values
+    config_manager.save(app_config)
     log_dir = os.path.dirname(app_config.logger_configuration.filename)
     os.makedirs(log_dir, exist_ok=True)
     logging.basicConfig(
@@ -72,15 +77,21 @@ def synchronizer(config_path: str):
     logging.getLogger('PIL').setLevel(logging.ERROR)
     if app_config.thumbnails_configuration.clean_on_startup:
         # Clean old images if any
-        if os.path.isdir(app_config.thumbnails_configuration.temp_loading_dir_path):
-            shutil.rmtree(app_config.thumbnails_configuration.temp_loading_dir_path)
-        if os.path.isdir(app_config.thumbnails_configuration.resized_images_dir_path):
-            shutil.rmtree(app_config.thumbnails_configuration.resized_images_dir_path)
-        os.makedirs(app_config.thumbnails_configuration.temp_loading_dir_path, exist_ok=True)
-        os.makedirs(app_config.thumbnails_configuration.resized_images_dir_path, exist_ok=True)
-    # Start the main import to cache
-    upload_to_cache(app_config=app_config)
-    # images_loading_test(app_config=app_config)
+        dirs_for_clean_up = [
+            app_config.thumbnails_configuration.temp_loading_dir_path,
+            app_config.thumbnails_configuration.resized_images_dir_path,
+            app_config.thumbnails_configuration.image_links_by_store_code
+        ]
+        for dir in dirs_for_clean_up:
+            if dir is None:
+                continue
+            if os.path.isdir(dir):
+                shutil.rmtree(dir)
+            os.makedirs(dir, exist_ok=True)
+    if download_images_only:
+        images_loading_test(app_config=app_config)
+    else:
+        upload_to_cache(app_config=app_config)
 
 
 if __name__ == '__main__':
