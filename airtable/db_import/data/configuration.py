@@ -8,10 +8,10 @@ class AirtableConfig:
         ordered = True
     # how to get base_id, table_name
     # https://support.airtable.com/docs/finding-airtable-ids
-    api_key: str = 'patI6jvuOLJrT05fI.2583af75464fa4daa06d9b1d856bfc352f401b9fab0d2bdcc202c6bb9f1c0b60'
-    database_id: str = 'appqcEalZfvY4G1vy'
-    products_table_id: str = 'tblWx2fdWqAYMp3JQ'
-    product_codes_table_id: str = 'tblAgS5fy0cWTeaVK'
+    api_key: str = 'api-key'
+    database_id: str = 'db-id'
+    products_table_id: str = 'id-of-table-with-dataset-codes'
+    store_code_table_id: str = 'id-of-table-with-store-codes'
 
 
 @dataclass

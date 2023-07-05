@@ -1,14 +1,8 @@
 import logging
 import os
 import traceback
-from io import BytesIO
-from pathlib import Path
 from typing import Dict, Optional, List
 
-import requests
-import wget as wget
-
-from PIL import Image
 from pyairtable import Table
 from urllib3.util import Url
 
@@ -21,7 +15,7 @@ _logger = logging.getLogger("AirtableSyncService")
 class AirtableSyncService:
     config: AirtableConfig
     products_table: Table
-    products_code_table: Table
+    store_code_table: Table
 
     thumbnail_buffer: Dict[str, AirtableThumbnail]
 
@@ -35,10 +29,10 @@ class AirtableSyncService:
             table_name=self.config.products_table_id
         )
         # https://airtable.com/appqcEalZfvY4G1vy/tblAgS5fy0cWTeaVK/viwn5mjq1FlD2aLyr?blocks=hide
-        self.products_code_table = Table(
+        self.store_code_table = Table(
             api_key=self.config.api_key,
             base_id=self.config.database_id,
-            table_name=self.config.product_codes_table_id
+            table_name=self.config.store_code_table_id
         )
         self.thumbnail_buffer = dict()
         _logger.info("Connected to Airtable")
@@ -126,7 +120,7 @@ class AirtableSyncService:
         Get all alpha store codes (like 5300) from Products table.
         """
         _logger.info("Loading codes from `Products` table...")
-        store_codes_dto: List[Dict] = self.products_code_table.all()
+        store_codes_dto: List[Dict] = self.store_code_table.all()
         _logger.debug(
             f'There is {len(store_codes_dto)} records in `products_code_table`'
         )
