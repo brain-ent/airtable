@@ -9,7 +9,7 @@ import wget
 from PIL import Image
 
 from airtable.db_import.data.configuration import AppConfig, ThumbnailsConfig
-from airtable.db_import.data.db_models import Thumbnail
+from airtable.db_import.data.db_models import Thumbnail, StoreProductCode, Product
 
 
 class ThumbnailsLoader:
@@ -28,6 +28,19 @@ class ThumbnailsLoader:
         os.unlink(src)
         self._logger.debug(f"{dst} saved")
 
+    def _gen_resized_path(self, thumbnail: Thumbnail) -> Union[Path, str]:
+        return Path(self.config.resized_images_dir_path) / f'{thumbnail.Name}.{self.config.format}'
+
+    def _create_symlinks(self, thumbnail: Thumbnail):
+        resized_image_path = self._gen_resized_path(thumbnail)
+        product: Product = Product.select(Product.RecordId).where(Product.Thumbnail == thumbnail.RecordId)[0]
+        product_id = product.RecordId
+        store_codes = StoreProductCode.select().where(StoreProductCode.Product == product_id)
+        for sc in store_codes:
+            sc: StoreProductCode
+            link_target = Path(self.config.image_links_by_store_code) / f'{sc.Code}.{self.config.format}'
+            os.symlink(resized_image_path, link_target)
+
     def load(self):
 
         self._logger.info("Thumbnails loading...")
@@ -41,13 +54,12 @@ class ThumbnailsLoader:
         try:
             if self.app_config.logger_configuration.log_level.lower() == "debug":
                 print(f"loading thumbnail: {thumbnail.Name}")
-
             image_temp_path = f"{self.config.temp_loading_dir_path}/{thumbnail.Name}"
-            resized_image_path = Path(f"{self.config.resized_images_dir_path}/{thumbnail.Name}")
-            resized_image_path = os.path.splitext(resized_image_path)[0] + '.' + self.config.format
-
+            resized_image_path = self._gen_resized_path(thumbnail)
             response = wget.download(thumbnail.Url, image_temp_path)
             self.resize_image(Path(response), resized_image_path)
+            if self.config.image_links_by_store_code is not None:
+                self._create_symlinks(thumbnail)
         except Exception:
             traceback.print_exc()
 

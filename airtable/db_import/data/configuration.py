@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 @dataclass
@@ -30,7 +30,7 @@ class LoggerConfig:
     class Meta:
         ordered = True
     filename: str = '/tmp/airtable/synchronizer.log'
-    log_level: str = 'INFO'
+    log_level: str = 'DEBUG'
 
 
 @dataclass
@@ -40,7 +40,8 @@ class ThumbnailsConfig:
     size: Tuple[int, int] = (300, 300)
     format: str = 'png'
     temp_loading_dir_path: str = "/tmp/airtable/temp"
-    resized_images_dir_path: str = "/tmp/airtable/pics"
+    resized_images_dir_path: str = "/tmp/airtable/pics-by-dataset-code"
+    image_links_by_store_code: Optional[str] = "/tmp/airtable/pics-by-store-code"
     clean_on_startup: bool = True
 
 
