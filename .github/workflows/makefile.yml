@@ -1,0 +1,57 @@
+name: Makefile CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Update version info
+      id: update_ver
+      env:
+        build_num: ${{ github.run_number }}
+      run: bash airtable/db_import/version/ver_update.sh
+
+    - name: Check version info
+      id: check_ver
+      run: echo Version '${{ steps.update_ver.outputs.ver }}'
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name:  AirtableDBImport.${{ steps.update_ver.outputs.ver }}
+        release_name: AirtableDBImport.${{ steps.update_ver.outputs.ver }}
+        body: |
+            Automated Release by GitHub Action CI
+        draft: false
+        prerelease: true
+
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'release.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig bin/* /*ansible/* /*experimental/* /*docs/* /*.vscode/* .idea/* .github/* .azureml* scripts/* /*tests/* azure_ml/* /*visual_test/*'
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release.zip
+        asset_name: AirtableDBImport.${{ steps.update_ver.outputs.ver }}.zip
+        asset_content_type: application/zip
