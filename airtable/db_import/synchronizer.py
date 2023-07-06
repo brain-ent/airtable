@@ -14,6 +14,7 @@ from airtable.db_import.service.airtable_sync_service import AirtableSyncService
 from airtable.db_import.service.config_service import ConfigManager
 from airtable.db_import.service.psql_service import PostgresDBService
 from airtable.db_import.service.thumbnails_loader import ThumbnailsLoader
+from airtable.db_import.version import get_build_info
 
 _logger = logging.getLogger("Synchronizer")
 
@@ -75,6 +76,10 @@ def synchronizer(
         ]
     )
     logging.getLogger('PIL').setLevel(logging.ERROR)
+    build_info = get_build_info()
+    _logger.info("=" * len(build_info))
+    _logger.info(build_info)
+    _logger.info("=" * len(build_info))
     if app_config.thumbnails_configuration.clean_on_startup:
         # Clean old images if any
         dirs_for_clean_up = [
