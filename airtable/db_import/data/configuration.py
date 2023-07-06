@@ -10,8 +10,6 @@ class DBType(Enum):
 
 @dataclass
 class AirtableConfig:
-    class Meta:
-        ordered = True
     # how to get base_id, table_name
     # https://support.airtable.com/docs/finding-airtable-ids
     api_key: str = '<api-key>'
@@ -22,8 +20,6 @@ class AirtableConfig:
 
 @dataclass
 class PostgresDbConfig:
-    class Meta:
-        ordered = True
     db_host: str = 'localhost'
     db_port: int = 5433
     db_user: str = 'postgres'
@@ -33,23 +29,17 @@ class PostgresDbConfig:
 
 @dataclass
 class SQLiteDbConfig:
-    class Meta:
-        ordered = True
     db_path: str = '/tmp/airtable/sqlite.db'
 
 
 @dataclass
 class LoggerConfig:
-    class Meta:
-        ordered = True
     filename: str = '/tmp/airtable/synchronizer.log'
     log_level: str = 'DEBUG'
 
 
 @dataclass
 class ThumbnailsConfig:
-    class Meta:
-        ordered = True
     size: Tuple[int, int] = (300, 300)
     format: str = 'png'
     temp_loading_dir_path: str = "/tmp/airtable/temp"
@@ -60,8 +50,6 @@ class ThumbnailsConfig:
 
 @dataclass
 class AppConfig:
-    class Meta:
-        ordered = True
     airtable_configuration: AirtableConfig = field(default=AirtableConfig())
     db_type: DBType = DBType.PSQL
     postgres_db_configuration: PostgresDbConfig = field(default=PostgresDbConfig())
