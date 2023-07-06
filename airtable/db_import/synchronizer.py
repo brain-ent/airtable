@@ -12,7 +12,7 @@ from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbna
 from airtable.db_import.data.import_record_model import ImportRecordModel
 from airtable.db_import.service.airtable_sync_service import AirtableSyncService
 from airtable.db_import.service.config_service import ConfigManager
-from airtable.db_import.service.psql_service import PostgresDBService
+from airtable.db_import.service.local_db_service import LocalDBService
 from airtable.db_import.service.thumbnails_loader import ThumbnailsLoader
 from airtable.db_import.version import get_build_info
 
@@ -21,13 +21,13 @@ _logger = logging.getLogger("Synchronizer")
 
 def upload_to_cache(app_config: AppConfig):
     airtable_sync_service = AirtableSyncService(app_config)
-    postgres_db_service = PostgresDBService(app_config=app_config)
+    local_db_service = LocalDBService(app_config=app_config)
     thumbnails_loader = ThumbnailsLoader(app_config)
 
     store_codes_dict = airtable_sync_service.get_all_store_codes()
     products: List[ImportRecordModel] = airtable_sync_service.get_all_products(store_codes_dict)
 
-    postgres_db_service.create_tables()
+    local_db_service.create_tables()
 
     _logger.info("Saving Sigale product codes")
     for store_code in store_codes_dict.values():
@@ -38,13 +38,13 @@ def upload_to_cache(app_config: AppConfig):
         Product.save_from_airtable(product)
 
     thumbnails_loader.multithread_load()
-    count_of_records = postgres_db_service.count_of_records()
+    count_of_records = local_db_service.count_of_records()
     _logger.info(f"data uploaded: {count_of_records}")
 
 
 def images_loading_test(app_config):
-    postgres_db_service = PostgresDBService(app_config=app_config)
-    postgres_db_service.cache_database.bind([StoreProductCode, Product, Thumbnail])
+    local_db_service = LocalDBService(app_config=app_config)
+    local_db_service.cache_database.bind([StoreProductCode, Product, Thumbnail])
     ThumbnailsLoader(app_config).multithread_load()
 
 

@@ -1,5 +1,11 @@
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Tuple, Optional
+
+
+class DBType(Enum):
+    PSQL = 'PSQL'
+    SQLITE = 'SQLITE'
 
 
 @dataclass
@@ -23,6 +29,13 @@ class PostgresDbConfig:
     db_user: str = 'postgres'
     db_password: str = 'postgres'
     db_name: str = 'airtable_cache'
+
+
+@dataclass
+class SQLiteDbConfig:
+    class Meta:
+        ordered = True
+    db_path: str = '/tmp/airtable/sqlite.db'
 
 
 @dataclass
@@ -50,6 +63,8 @@ class AppConfig:
     class Meta:
         ordered = True
     airtable_configuration: AirtableConfig = field(default=AirtableConfig())
+    db_type: DBType = DBType.PSQL
     postgres_db_configuration: PostgresDbConfig = field(default=PostgresDbConfig())
+    sqlite_db_configuration: SQLiteDbConfig = field(default=SQLiteDbConfig())
     thumbnails_configuration: ThumbnailsConfig = field(default=ThumbnailsConfig())
     logger_configuration: LoggerConfig = field(default=LoggerConfig())
