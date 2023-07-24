@@ -9,8 +9,6 @@ from urllib3.util import Url
 from airtable.common.config.configuration import AppConfig, AirtableConfig
 from airtable.common.data.import_record_model import ImportRecordModel, AirtableThumbnail, StoreCode
 
-_logger = logging.getLogger("AirtableSyncService")
-
 
 class AirtableSyncService:
     config: AirtableConfig
@@ -20,7 +18,7 @@ class AirtableSyncService:
     thumbnail_buffer: Dict[str, AirtableThumbnail]
 
     def __init__(self, app_config: AppConfig):
-        _logger.info("Connecting to Airtable")
+        logging.info("Connecting to Airtable")
         self.config = app_config.airtable_configuration
         # https://airtable.com/appqcEalZfvY4G1vy/tblcRn5JEXVSLWzFx/viwZ2DchVVKYRraPH?blocks=hide
         self.products_table = Table(
@@ -35,7 +33,7 @@ class AirtableSyncService:
             table_name=self.config.store_code_table_id
         )
         self.thumbnail_buffer = dict()
-        _logger.info("Connected to Airtable")
+        logging.info("Connected to Airtable")
 
     def extract_thumbnail(self, thumbnail_dto_list: dict = None) -> Optional[AirtableThumbnail]:
         if thumbnail_dto_list is None:
@@ -58,7 +56,7 @@ class AirtableSyncService:
         record_id = airtable_dto.get("id", None)
         record_fields = airtable_dto.get("fields", None)
         if record_id is None or record_fields is None:
-            _logger.error("Exception during reading record")
+            logging.error("Exception during reading record")
             return False, None, None
         else:
             return True, record_id, record_fields
@@ -119,13 +117,13 @@ class AirtableSyncService:
         """
         Get all alpha store codes (like 5300) from Products table.
         """
-        _logger.info("Loading codes from `Products` table...")
+        logging.info("Loading codes from `Products` table...")
         store_codes_dto: List[Dict] = self.store_code_table.all()
-        _logger.debug(
+        logging.debug(
             f'There is {len(store_codes_dto)} records in `products_code_table`'
         )
         debug_num = 3
-        _logger.debug(
+        logging.debug(
             f'First {debug_num} records of `products_code_table`: '
             f'{store_codes_dto[:debug_num]}'
         )
@@ -137,14 +135,14 @@ class AirtableSyncService:
                     store_codes_by_record_id[store_code.record_id] = store_code
             except Exception as e:
                 traceback.print_exc()
-        _logger.debug(f'There is {len(store_codes_by_record_id)} extracted store codes')
+        logging.debug(f'There is {len(store_codes_by_record_id)} extracted store codes')
         return store_codes_by_record_id
 
     def get_all_products(self, store_codes_dict: Dict[str, StoreCode]) -> List[ImportRecordModel]:
-        _logger.info("Load dataset products")
+        logging.info("Load dataset products")
         records_dto_list = self.products_table.all()
         debug_num = 3
-        _logger.debug(
+        logging.debug(
             f'First records {debug_num} of `products_table`: '
             f'{records_dto_list[:debug_num]}'
         )

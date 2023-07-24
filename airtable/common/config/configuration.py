@@ -34,7 +34,7 @@ class SQLiteDbConfig:
 
 @dataclass
 class LoggerConfig:
-    filename: str = '/tmp/airtable/synchronizer.log'
+    log_dir: str = '/tmp/airtable/'
     log_level: str = 'DEBUG'
 
 
