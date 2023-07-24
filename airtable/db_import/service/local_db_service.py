@@ -4,7 +4,7 @@ from typing import Dict, Union
 
 from peewee import PostgresqlDatabase, SqliteDatabase
 
-from airtable.db_import.data.configuration import AppConfig, PostgresDbConfig, SQLiteDbConfig, DBType
+from airtable.common.config.configuration import AppConfig, PostgresDbConfig, SQLiteDbConfig, DBType
 from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail
 
 _logger = logging.getLogger("LocalDBService")

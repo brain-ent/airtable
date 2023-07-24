@@ -7,11 +7,11 @@ from typing import List
 
 import fire
 
-from airtable.db_import.data.configuration import AppConfig
+from airtable.common.config.configuration import AppConfig
 from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail
-from airtable.db_import.data.import_record_model import ImportRecordModel
-from airtable.db_import.service.airtable_sync_service import AirtableSyncService
-from airtable.db_import.service.config_service import ConfigManager
+from airtable.common.data.import_record_model import ImportRecordModel
+from airtable.common.service.airtable_sync_service import AirtableSyncService
+from airtable.common.config.config_manager import ConfigManager
 from airtable.db_import.service.local_db_service import LocalDBService
 from airtable.db_import.service.thumbnails_loader import ThumbnailsLoader
 from airtable.db_import.version import get_build_info

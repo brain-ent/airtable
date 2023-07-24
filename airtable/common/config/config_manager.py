@@ -5,7 +5,7 @@ from typing import Optional
 
 import marshmallow_dataclass
 
-from airtable.db_import.data.configuration import AppConfig
+from airtable.common.config.configuration import AppConfig
 
 
 class ConfigManager:

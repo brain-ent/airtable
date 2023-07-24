@@ -1,9 +1,8 @@
 import logging
 
-from peewee import Model, CharField, ForeignKeyField, IntegerField, PostgresqlDatabase
+from peewee import Model, CharField, ForeignKeyField, IntegerField
 
-from airtable.db_import.data.configuration import AppConfig, PostgresDbConfig
-from airtable.db_import.data.import_record_model import StoreCode, AirtableThumbnail, ImportRecordModel
+from airtable.common.data.import_record_model import StoreCode, AirtableThumbnail, ImportRecordModel
 
 # DB_NAME = 'airtable_cache'
 # DB_HOST = 'localhost'

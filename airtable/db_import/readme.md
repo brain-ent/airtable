@@ -24,5 +24,5 @@
 # DEV
 You need to install libpq-dev (Ubuntu) to be able to run `pip install -r requirements.txt` 
 
-You could run db from [docker-compose.yml](docker-compose.yml)
+You could run db from [docker-compose.yml](../docker-compose.yml)
 

@@ -8,7 +8,7 @@ from typing import Union
 import wget
 from PIL import Image
 
-from airtable.db_import.data.configuration import AppConfig, ThumbnailsConfig
+from airtable.common.config.configuration import AppConfig, ThumbnailsConfig
 from airtable.db_import.data.db_models import Thumbnail, StoreProductCode, Product
 
 

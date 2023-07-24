@@ -6,8 +6,8 @@ from typing import Dict, Optional, List
 from pyairtable import Table
 from urllib3.util import Url
 
-from airtable.db_import.data.configuration import AppConfig, AirtableConfig
-from airtable.db_import.data.import_record_model import ImportRecordModel, AirtableThumbnail, StoreCode
+from airtable.common.config.configuration import AppConfig, AirtableConfig
+from airtable.common.data.import_record_model import ImportRecordModel, AirtableThumbnail, StoreCode
 
 _logger = logging.getLogger("AirtableSyncService")
 
