@@ -20,7 +20,7 @@ jobs:
       id: update_ver
       env:
         build_num: ${{ github.run_number }}
-      run: bash airtable/db_import/version/ver_update.sh
+      run: bash airtable/version/ver_update.sh
 
     - name: Check version info
       id: check_ver
