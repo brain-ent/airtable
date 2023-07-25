@@ -9,7 +9,7 @@
 
 1. Create personal access token, [guidelines here](https://airtable.com/developers/web/guides/personal-access-tokens).
 2. Get base_id, and tables_id like described [here](https://airtable.com/developers/web/guides/personal-access-tokens) or here: ![img.png](../docs/img.png)
-3. If you do not have example of config - run app by script [sync.sh](sync.sh). Config file will be created
+3. If you do not have example of config - run app by script [sync.sh](../sync.sh). Config file will be created
 4. Replace in config file: 
    - `airtable_configuration.api_key` -> your personal access token
    - `airtable_configuration.database_id` -> your `BaseID`
