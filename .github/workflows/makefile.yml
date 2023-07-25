@@ -32,8 +32,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name:  AirtableDBImport.${{ steps.update_ver.outputs.ver }}
-        release_name: AirtableDBImport.${{ steps.update_ver.outputs.ver }}
+        tag_name:  AirtableUtils.${{ steps.update_ver.outputs.ver }}
+        release_name: AirtableUtils.${{ steps.update_ver.outputs.ver }}
         body: |
             Automated Release by GitHub Action CI
         draft: false
@@ -53,5 +53,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./release.zip
-        asset_name: AirtableDBImport.${{ steps.update_ver.outputs.ver }}.zip
+        asset_name: AirtableUtils.${{ steps.update_ver.outputs.ver }}.zip
         asset_content_type: application/zip
