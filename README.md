@@ -1,2 +1,0 @@
-# airtable
-Airtable integration

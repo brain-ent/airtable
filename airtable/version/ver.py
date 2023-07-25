@@ -1,7 +1,7 @@
 # Do not change names of vars with VER_ and BUILD_ prefixes,
 # because they are used by version_update.sh
 VER_MAJOR = '3'
-VER_MINOR = '1'
+VER_MINOR = '2'
 VER_PATCH = '0'
 # Use BUILD_DATE and BUILD_NUMBER carefully,
 # because they will be replaced by the bash script version_update.sh
