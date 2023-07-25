@@ -4,7 +4,7 @@ import sys
 from logging.handlers import TimedRotatingFileHandler
 
 from airtable.common.config.configuration import AppConfig
-from airtable.db_import.version import get_build_info
+from airtable.version import get_build_info
 
 
 def setup_logs(
