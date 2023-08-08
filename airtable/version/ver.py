@@ -2,7 +2,7 @@
 # because they are used by version_update.sh
 VER_MAJOR = '3'
 VER_MINOR = '2'
-VER_PATCH = '0'
+VER_PATCH = '1'
 # Use BUILD_DATE and BUILD_NUMBER carefully,
 # because they will be replaced by the bash script version_update.sh
 BUILD_NUMBER = 'number_undefined'

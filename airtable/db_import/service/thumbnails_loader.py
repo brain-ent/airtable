@@ -29,9 +29,10 @@ class ThumbnailsLoader:
         self._logger.debug(f"{dst} saved")
 
     def _gen_resized_path(self, thumbnail: Thumbnail) -> Union[Path, str]:
-        return Path(self.config.resized_images_dir_path) / f'{thumbnail.Name}.{self.config.format}'
+        file_name_wo_ext = os.path.splitext(thumbnail.Name)[0]
+        return Path(self.config.resized_images_dir_path) / f'{file_name_wo_ext}.{self.config.format}'
 
-    def _create_symlinks(self, thumbnail: Thumbnail):
+    def _create_links(self, thumbnail: Thumbnail):
         resized_image_path = self._gen_resized_path(thumbnail)
         product: Product = Product.select(Product.RecordId).where(Product.Thumbnail == thumbnail.RecordId)[0]
         product_id = product.RecordId
@@ -59,7 +60,7 @@ class ThumbnailsLoader:
             response = wget.download(thumbnail.Url, image_temp_path)
             self.resize_image(Path(response), resized_image_path)
             if self.config.image_links_by_store_code is not None:
-                self._create_symlinks(thumbnail)
+                self._create_links(thumbnail)
         except Exception:
             traceback.print_exc()
 
