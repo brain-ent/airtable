@@ -71,7 +71,7 @@ for further steps
         (like `5300`, `5510`, etc.)
    2. SQL DB settings (for AirTable synchronizer): 
       `sqlite_db_configuration` and `postgres_db_configuration`
-      * If you use PostgreSQL from `./airtable/db_import/docker-compose.yml`
+      * If you use PostgreSQL from `./airtable/docker-compose.yml`
         then you do not need to change any of these settings.
       * If you want to use your own PostgreSQL, then you need to fill all settings
         in `postgres_db_configuration` section
