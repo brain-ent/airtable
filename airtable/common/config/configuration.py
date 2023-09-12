@@ -50,9 +50,14 @@ class ThumbnailsConfig:
 
 @dataclass
 class AppConfig:
-    airtable_configuration: AirtableConfig = field(default=AirtableConfig())
+    airtable_configuration: AirtableConfig \
+        = field(default_factory=AirtableConfig)
     db_type: DBType = DBType.PSQL
-    postgres_db_configuration: PostgresDbConfig = field(default=PostgresDbConfig())
-    sqlite_db_configuration: SQLiteDbConfig = field(default=SQLiteDbConfig())
-    thumbnails_configuration: ThumbnailsConfig = field(default=ThumbnailsConfig())
-    logger_configuration: LoggerConfig = field(default=LoggerConfig())
+    postgres_db_configuration: PostgresDbConfig \
+        = field(default_factory=PostgresDbConfig)
+    sqlite_db_configuration: SQLiteDbConfig \
+        = field(default_factory=SQLiteDbConfig)
+    thumbnails_configuration: ThumbnailsConfig \
+        = field(default_factory=ThumbnailsConfig)
+    logger_configuration: LoggerConfig \
+        = field(default_factory=LoggerConfig)
