@@ -16,6 +16,7 @@ class AirtableConfig:
     database_id: str = '<db-id>'
     products_table_id: str = '<id-of-table-with-dataset-codes>'
     store_code_table_id: str = '<id-of-table-with-store-codes>'
+    products_stats_table_id: str = '<id of the table named Products stats>'
 
 
 @dataclass
