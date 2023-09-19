@@ -52,7 +52,11 @@ def synchronizer(
     config_manager = ConfigManager(config_path)
     app_config = config_manager.load()
     if app_config is None:
-        logging.critical(f"Could not read configuration file: {config_path}")
+        logging.critical(
+            f"Cannot find config file: {config_path}. "
+            f"A default file will be saved to {config_path}. "
+            f"Please open it and edit."
+        )
         exit(1)
     # Update new default values
     config_manager.save(app_config)

@@ -30,7 +30,7 @@ def setup_logs(
             )
         ]
     )
-    logging.getLogger('PIL').setLevel(logging.ERROR)
+    logging.getLogger('PIL').setLevel(logging.DEBUG)
 
 
 def log_build_info():
