@@ -76,7 +76,7 @@ for further steps
       * If you want to use your own PostgreSQL, then you need to fill all settings
         in `postgres_db_configuration` section
       * If you want to use SQLite, then you need to set `db_type` to `SQLITE`
-        and set the path db_path
+        and set the path db_path. If you want to use PostgreSQl - set `PSQL`
    3. Thumbnail settings (for AirTable synchronizer): `thumbnails_configuration`
       * `temp_loading_dir_path` -- temporary directory for downloads
       * `resized_images_dir_path` -- directory for result images, 

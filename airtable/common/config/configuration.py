@@ -52,7 +52,7 @@ class ThumbnailsConfig:
 class AppConfig:
     airtable_configuration: AirtableConfig \
         = field(default_factory=AirtableConfig)
-    db_type: DBType = DBType.PSQL
+    db_type: DBType = DBType.SQLITE
     postgres_db_configuration: PostgresDbConfig \
         = field(default_factory=PostgresDbConfig)
     sqlite_db_configuration: SQLiteDbConfig \
