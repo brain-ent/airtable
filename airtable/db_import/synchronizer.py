@@ -37,10 +37,10 @@ def upload_to_cache(app_config: AppConfig):
     for product in products_by_record_id.values():
         Product.save_from_airtable(product)
 
-    print('!!!!')
+    print('Table: products_stats')
     for product_stat in products_stats_by_record_id.values():
         r = ProductsStats.save_from_airtable(product_stat)
-        print('!!!!', r)
+        print('Record:', r)
 
     thumbnails_loader.multithread_load()
     count_of_records = local_db_service.count_of_records()
