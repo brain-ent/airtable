@@ -9,7 +9,7 @@ import fire
 import marshmallow_dataclass
 
 from airtable.common.config.config_manager import ConfigManager
-from airtable.common.data.import_record_model import ImportRecordModel
+from airtable.common.data.import_record_model import ProducesDatasetModel
 from airtable.common.logs import setup_logs, log_build_info
 from airtable.common.service.airtable_sync_service import AirtableSyncService
 
@@ -68,7 +68,7 @@ def get_ia_codes_from_file(path: str) -> Set[str]:
 
 def collect_all_store_codes(
         ia_codes: Iterable[str],
-        store_product_by_ia_code: Dict[str, ImportRecordModel]
+        store_product_by_ia_code: Dict[str, ProducesDatasetModel]
 ) -> Set[str]:
     all_store_codes = set()
     for iac in ia_codes:
@@ -128,8 +128,8 @@ def grab_store_codes(
     logging.debug(f'Codes: {code_str}')
     airtable_sync_service = AirtableSyncService(app_config)
     store_codes_by_id = airtable_sync_service.get_all_store_codes()
-    products = airtable_sync_service.get_all_products(store_codes_by_id)
-    products_by_ia_code: Dict[str, ImportRecordModel] = {p.dataset_code: p for p in products}
+    products = airtable_sync_service.get_all_products(store_codes_by_id).values()
+    products_by_ia_code: Dict[str, ProducesDatasetModel] = {p.dataset_code: p for p in products}
     print()
     logging.info(f'Inspecting {len(ia_codes)} IA codes...')
     all_store_codes = collect_all_store_codes(

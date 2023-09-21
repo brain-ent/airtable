@@ -8,8 +8,7 @@ import fire
 
 from airtable.common.config.configuration import AppConfig
 from airtable.common.logs import setup_logs, log_build_info
-from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail
-from airtable.common.data.import_record_model import ImportRecordModel
+from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail, ProductsStats
 from airtable.common.service.airtable_sync_service import AirtableSyncService
 from airtable.common.config.config_manager import ConfigManager
 from airtable.db_import.service.local_db_service import LocalDBService
@@ -21,18 +20,27 @@ def upload_to_cache(app_config: AppConfig):
     local_db_service = LocalDBService(app_config=app_config)
     thumbnails_loader = ThumbnailsLoader(app_config)
 
-    store_codes_dict = airtable_sync_service.get_all_store_codes()
-    products: List[ImportRecordModel] = airtable_sync_service.get_all_products(store_codes_dict)
+    store_codes_by_record_id = airtable_sync_service.get_all_store_codes()
+    products_by_record_id = airtable_sync_service.get_all_products(store_codes_by_record_id)
+    products_stats_by_record_id = airtable_sync_service.get_all_products_stats(
+        store_codes_by_record_id=store_codes_by_record_id,
+        products_by_record_id=products_by_record_id
+    )
 
     local_db_service.create_tables()
 
     logging.info("Saving Sigale product codes")
-    for store_code in store_codes_dict.values():
+    for store_code in store_codes_by_record_id.values():
         StoreProductCode.save_from_airtable(store_code)
 
     logging.info("Saving dataset products")
-    for product in products:
+    for product in products_by_record_id.values():
         Product.save_from_airtable(product)
+
+    print('Table: products_stats')
+    for product_stat in products_stats_by_record_id.values():
+        r = ProductsStats.save_from_airtable(product_stat)
+        print('Record:', r)
 
     thumbnails_loader.multithread_load()
     count_of_records = local_db_service.count_of_records()

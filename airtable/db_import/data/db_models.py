@@ -2,7 +2,7 @@ import logging
 
 from peewee import Model, CharField, ForeignKeyField, IntegerField
 
-from airtable.common.data.import_record_model import StoreCode, AirtableThumbnail, ImportRecordModel
+from airtable.common.data.import_record_model import StoreCode, AirtableThumbnail, ProducesDatasetModel, ProductsStatsModel
 
 # DB_NAME = 'airtable_cache'
 # DB_HOST = 'localhost'
@@ -15,6 +15,7 @@ from airtable.common.data.import_record_model import StoreCode, AirtableThumbnai
 PRODUCT_TABLE_NAME = 'product'
 STORE_PRODUCT_CODE_TABLE_NAME = 'store_product_code'
 THUMBNAIL_TABLE_NAME = 'thumbnail'
+PRODUCTS_STATS_TABLE_NAME = 'products_stats'
 
 _logger = logging.getLogger("Repository")
 
@@ -62,7 +63,7 @@ class Product(Model):
         db_table = PRODUCT_TABLE_NAME
 
     @staticmethod
-    def save_from_airtable(airtable_product: ImportRecordModel):
+    def save_from_airtable(airtable_product: ProducesDatasetModel):
 
         _logger.debug(f"Saving product: {airtable_product}")
         saved_thumbnail = Thumbnail.save_from_airtable(airtable_product.thumbnail)
@@ -117,3 +118,27 @@ class StoreProductCode(Model):
 
         _logger.debug(f"Saved Sigale code: {saved_store_code}")
         return saved_store_code
+
+
+class ProductsStats(Model):
+    RecordID = CharField(primary_key=True)
+    ProductCode = CharField()
+    Nom = CharField()
+    Dataset = ForeignKeyField(Product, null=True)
+    StatutPhotoset = CharField()
+    Thumbnail = ForeignKeyField(Thumbnail, null=True)
+
+    class Meta:
+        db_table = PRODUCTS_STATS_TABLE_NAME
+
+    @staticmethod
+    def save_from_airtable(products_stats_model: ProductsStatsModel):
+        product_stats = ProductsStats.create(
+            RecordID=products_stats_model.record_id,
+            ProductCode=products_stats_model.product_code,
+            Nom=products_stats_model.nom,
+            Dataset=products_stats_model.dataset,
+            StatutPhotoset=products_stats_model.statut_photoset,
+            Thumbnail=products_stats_model.thumbnail
+        )
+        return product_stats
