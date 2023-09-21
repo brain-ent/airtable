@@ -43,7 +43,7 @@ jobs:
       uses: thedoctor0/zip-release@master
       with:
         filename: 'release.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig bin/* /*ansible/* /*experimental/* /*docs/* /*.vscode/* .idea/* .github/* .azureml* scripts/* /*tests/* azure_ml/* /*visual_test/*'
+        exclusions: '*.git* /*.vscode/* .idea/* .github/*'
 
     - name: Upload Release Asset
       id: upload-release-asset
