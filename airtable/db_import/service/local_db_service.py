@@ -5,7 +5,7 @@ from typing import Dict, Union
 from peewee import PostgresqlDatabase, SqliteDatabase
 
 from airtable.common.config.configuration import AppConfig, PostgresDbConfig, SQLiteDbConfig, DBType
-from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail
+from airtable.db_import.data.db_models import StoreProductCode, Product, Thumbnail, ProductsStats
 
 _logger = logging.getLogger("LocalDBService")
 
@@ -42,12 +42,13 @@ class LocalDBService:
         StoreProductCode.truncate_table()
         Product.truncate_table()
         Thumbnail.truncate_table()
+        ProductsStats.truncate_table()
 
     def create_tables(self):
         _logger.info("Updating cache database tables")
-        self.cache_database.bind([StoreProductCode, Product, Thumbnail])
-        self.cache_database.drop_tables([StoreProductCode, Product, Thumbnail])
-        self.cache_database.create_tables([Thumbnail, Product, StoreProductCode])
+        self.cache_database.bind([StoreProductCode, Product, Thumbnail, ProductsStats])
+        self.cache_database.drop_tables([StoreProductCode, Product, Thumbnail, ProductsStats])
+        self.cache_database.create_tables([Thumbnail, Product, StoreProductCode, ProductsStats])
 
     def count_of_records(self) -> Dict[str, int]:
         result = dict(
