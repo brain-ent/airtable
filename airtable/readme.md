@@ -49,11 +49,13 @@ for further steps
 1. Go to your DB URL in any browser
 2. Copy the database ID (an ID after the first `/` in the URL)
 ![img.png](./docs/db_id.png)
-3. Next, you need two IDs of Airtable tables: 
-   1. Table with store codes. Copy an ID after the second / in the URL
+3. Next, you need three IDs of Airtable tables: 
+   1. Products - table with store codes. Copy an ID after the second / in the URL
     ![store_codes_table.png](./docs/store_codes_table.png)
-   2. Table with dataset codes
+   2. Produces Dataset - table with dataset codes
     ![dataset_codes_table.png](./docs/dataset_codes_table.png)
+   3. Products stats - table with statistics
+    ![dataset_codes_table.png](./docs/products_stats.png)
 
 ### Configuration
 1. Activate the Python environment

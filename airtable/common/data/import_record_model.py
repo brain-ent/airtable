@@ -25,7 +25,7 @@ class StoreCode:
 
 
 @dataclass
-class ImportRecordModel:
+class ProducesDatasetModel:
     record_id: str
     name: str
     thumbnail: AirtableThumbnail
@@ -43,3 +43,16 @@ class ImportRecordModel:
 
     def __init__(self):
         self.store_codes = []
+
+
+@dataclass
+class ProductsStatsModel:
+    record_id: str
+    product_code: str
+    nom: str
+    dataset: str
+    statut_photoset: str
+    thumbnail: str
+
+    def __init__(self):
+        ...

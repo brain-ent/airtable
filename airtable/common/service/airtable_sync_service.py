@@ -7,7 +7,7 @@ from pyairtable import Table
 from urllib3.util import Url
 
 from airtable.common.config.configuration import AppConfig, AirtableConfig
-from airtable.common.data.import_record_model import ImportRecordModel, AirtableThumbnail, StoreCode
+from airtable.common.data.import_record_model import ProducesDatasetModel, AirtableThumbnail, StoreCode, ProductsStatsModel
 
 
 class AirtableSyncService:
@@ -31,6 +31,11 @@ class AirtableSyncService:
             api_key=self.config.api_key,
             base_id=self.config.database_id,
             table_name=self.config.store_code_table_id
+        )
+        self.products_stats_table = Table(
+            api_key=self.config.api_key,
+            base_id=self.config.database_id,
+            table_name=self.config.products_stats_table_id
         )
         self.thumbnail_buffer = dict()
         logging.info("Connected to Airtable")
@@ -61,8 +66,8 @@ class AirtableSyncService:
         else:
             return True, record_id, record_fields
 
-    def extract_record_data(self, record_dto: dict, store_codes_dict: dict) -> Optional[ImportRecordModel]:
-        record = ImportRecordModel()
+    def extract_produces_data(self, record_dto: dict, store_codes_dict: dict) -> Optional[ProducesDatasetModel]:
+        record = ProducesDatasetModel()
         ret, record_id, record_fields = self.extract_id_and_fields(record_dto)
         if not ret:
             return None
@@ -138,7 +143,7 @@ class AirtableSyncService:
         logging.debug(f'There is {len(store_codes_by_record_id)} extracted store codes')
         return store_codes_by_record_id
 
-    def get_all_products(self, store_codes_dict: Dict[str, StoreCode]) -> List[ImportRecordModel]:
+    def get_all_products(self, store_codes_dict: Dict[str, StoreCode]) -> Dict[str, ProducesDatasetModel]:
         logging.info("Load dataset products")
         records_dto_list = self.products_table.all()
         debug_num = 3
@@ -146,13 +151,77 @@ class AirtableSyncService:
             f'First records {debug_num} of `products_table`: '
             f'{records_dto_list[:debug_num]}'
         )
-        records: List[ImportRecordModel] = []
-
+        products_by_record_id: Dict[str, ProducesDatasetModel] = {}
         for record_dto in records_dto_list:
             try:
-                record = self.extract_record_data(record_dto, store_codes_dict)
-                records.append(record)
+                record = self.extract_produces_data(record_dto, store_codes_dict)
+                products_by_record_id[record.record_id] = record
             except Exception as e:
                 traceback.print_stack()
+        return products_by_record_id
 
-        return records
+    def extract_products_stats_data(
+            self,
+            record_dto: Dict,
+            store_codes_by_record_id: Dict[str, StoreCode],
+            products_by_record_id: Dict[str, ProducesDatasetModel]
+    ) -> Optional[ProductsStatsModel]:
+        record = ProductsStatsModel()
+        ret, record_id, record_fields = self.extract_id_and_fields(record_dto)
+        if not ret:
+            return None
+        record.record_id = record_id
+        if 'Code' not in record_fields:
+            return None
+        product_code_link = record_fields['Product code'][0]
+        if product_code_link in store_codes_by_record_id.keys():
+            record.product_code = store_codes_by_record_id[product_code_link].name
+        else:
+            record.product_code = ''
+        if 'Nom' in record_fields:
+            record.nom = record_fields['Nom'][0]
+        else:
+            record.nom = ''
+        if 'Dataset' in record_fields:
+            record.dataset = record_fields['Dataset'][0]
+        else:
+            record.dataset = ''
+        if 'Thumbnail' in record_fields:
+            record.thumbnail = record_fields['Thumbnail'][0]['id']
+        else:
+            record.thumbnail = ''
+        if 'Statut photoset' in record_fields:
+            record.statut_photoset = record_fields['Statut photoset'][0]
+        else:
+            record.statut_photoset = ''
+            # dataset_link = record_fields['Dataset']
+        # if dataset_link in products_by_record_id.keys():
+        #     record.dataset
+        return record
+
+    def get_all_products_stats(
+            self,
+            store_codes_by_record_id: Dict[str, StoreCode],
+            products_by_record_id: Dict[str, ProducesDatasetModel]
+    ) -> Dict[str, ProductsStatsModel]:
+        logging.info(f'Loading Products stats')
+        products_stats_dto_list = self.products_stats_table.all()
+        debug_num = 3
+        logging.debug(
+            f'First records {debug_num} of `Products stats`: '
+            f'{products_stats_dto_list[:debug_num]}'
+        )
+        products_stats_by_record_id: Dict[str, ProductsStatsModel] = {}
+        for record_dto in products_stats_dto_list:
+            # try:
+            record = self.extract_products_stats_data(
+                record_dto=record_dto,
+                store_codes_by_record_id=store_codes_by_record_id,
+                products_by_record_id=products_by_record_id
+            )
+            if record is not None:
+                products_stats_by_record_id[record.record_id] = record
+            # except Exception as exc:
+            #     print(exc)
+            #     traceback.print_stack()
+        return products_stats_by_record_id
