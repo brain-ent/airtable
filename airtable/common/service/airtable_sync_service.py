@@ -86,10 +86,17 @@ class AirtableSyncService:
         record.photoset = Url(record_fields.get('Photoset', None))
         record.percentage_recognition = record_fields.get('% Recognition', 0)
 
-        if record.dataset_code is None:
-            # Do not use this thumbnail if there is no `dataset_code`
+        if record.dataset_code in (None, '') and record.name not in (None, ''):
+            # Try to make a fake dataset code based on product's name
+            name = record.name
+            name = name.upper()
+            name = name.replace(' ', '.')
+            record.dataset_code = name
+        if record.dataset_code in (None, ''):
+            # There are no dataset code or some readable name,
+            # so we will skip a thumbnail for this product
             record.thumbnail = None
-        else:
+        if record.thumbnail is not None:
             # Use `dataset_code` as a part of file name for this thumbnail
             file_name_parts = os.path.splitext(record.thumbnail.name)
             file_name = record.dataset_code + file_name_parts[1]
