@@ -12,6 +12,7 @@ from airtable.common.config.config_manager import ConfigManager
 from airtable.common.data.import_record_model import ProducesDatasetModel
 from airtable.common.logs import setup_logs, log_build_info
 from airtable.common.service.airtable_sync_service import AirtableSyncService
+from common.codes_and_ids.utils import split_ireco_code_and_subcode
 
 
 @dataclass
@@ -56,14 +57,19 @@ def get_ia_codes_from_txt_list(path: str) -> Set[str]:
 
 def get_ia_codes_from_file(path: str) -> Set[str]:
     logging.info(f'Reading IA codes from {path}')
+    result_codes: Set[str] = set()
     source_file_name: str = os.path.basename(path)
     if source_file_name == 'class_mapping.json':
-        ia_codes = get_ia_codes_from_class_mapping_json(path)
+        possible_ia_codes = get_ia_codes_from_class_mapping_json(path)
     elif source_file_name == 'classes.json':
-        ia_codes = get_ia_codes_from_classes_json(path)
+        possible_ia_codes = get_ia_codes_from_classes_json(path)
     else:
-        ia_codes = get_ia_codes_from_txt_list(path)
-    return ia_codes
+        possible_ia_codes = get_ia_codes_from_txt_list(path)
+    for possible_code in possible_ia_codes:
+        ireco_code, ireco_subcode = split_ireco_code_and_subcode(possible_code)
+        logging.debug(f'{possible_code} => {ireco_code}')
+        result_codes.add(ireco_code)
+    return result_codes
 
 
 def collect_all_store_codes(
