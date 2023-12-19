@@ -22,7 +22,11 @@ def upload_to_cache(app_config: AppConfig):
 
     store_codes_by_record_id = airtable_sync_service.get_all_store_codes()
     products_by_record_id = airtable_sync_service.get_all_products(store_codes_by_record_id)
-    products_stats_by_record_id = airtable_sync_service.get_all_products_stats(
+    # products_stats_by_record_id = airtable_sync_service.get_all_products_stats(
+    #     store_codes_by_record_id=store_codes_by_record_id,
+    #     products_by_record_id=products_by_record_id
+    # )
+    products_stats_by_record_id = airtable_sync_service.generate_products_stats(
         store_codes_by_record_id=store_codes_by_record_id,
         products_by_record_id=products_by_record_id
     )

@@ -19,6 +19,12 @@ class StoreCode:
     record_id: str
     name: str
     ud: str
+    # attributes for generation
+    # of fake products_stats
+    Code: str
+    Nom: str
+    StatutPhotoset: str
+    Dataset: str
 
     def __init__(self):
         pass

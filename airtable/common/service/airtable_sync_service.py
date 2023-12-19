@@ -120,6 +120,15 @@ class AirtableSyncService:
         store_code.record_id = record_id
         store_code.name = record_fields.get("Code", None)
         store_code.ud = record_fields.get("UD", None)
+        #
+        store_code.Code = record_fields.get("Code", None)
+        store_code.Nom = record_fields.get("Nom", '')
+        store_code.StatutPhotoset = record_fields.get("Statut photoset (from Dataset)", '')
+        if type(store_code.StatutPhotoset) == list:
+            store_code.StatutPhotoset = store_code.StatutPhotoset[0]
+        store_code.Dataset = record_fields.get("Dataset", None)
+        if type(store_code.Dataset) == list:
+            store_code.Dataset = store_code.Dataset[0]
         if store_code.name is None:
             return None
         else:
@@ -145,6 +154,9 @@ class AirtableSyncService:
                 store_code = self.extract_store_code_data(store_code_dto)
                 if store_code is not None:
                     store_codes_by_record_id[store_code.record_id] = store_code
+                    # FIXME: Remove aft6er debug
+                    # print(store_code)
+                    # quit(1)
             except Exception as e:
                 traceback.print_exc()
         logging.debug(f'There is {len(store_codes_by_record_id)} extracted store codes')
@@ -231,4 +243,27 @@ class AirtableSyncService:
             # except Exception as exc:
             #     print(exc)
             #     traceback.print_stack()
+        return products_stats_by_record_id
+
+    def generate_products_stats(
+            self,
+            store_codes_by_record_id: Dict[str, StoreCode],
+            products_by_record_id: Dict[str, ProducesDatasetModel]
+    ) -> Dict[str, ProductsStatsModel]:
+        products_stats_by_record_id: Dict[str, ProductsStatsModel] = {}
+        for store_code_record in store_codes_by_record_id.values():
+            ps_record = ProductsStatsModel()
+            ps_record.record_id = store_code_record.record_id
+            ps_record.product_code = store_code_record.Code
+            ps_record.nom = store_code_record.Nom
+            ps_record.statut_photoset = store_code_record.StatutPhotoset
+            ps_record.dataset = ''
+            ps_record.thumbnail = ''
+            if store_code_record.Dataset is not None:
+                ps_record.dataset = store_code_record.Dataset
+                if store_code_record.Dataset in products_by_record_id:
+                    record = products_by_record_id[store_code_record.Dataset]
+                    if record.thumbnail is not None:
+                        ps_record.thumbnail = record.thumbnail.record_id
+            products_stats_by_record_id[ps_record.record_id] = ps_record
         return products_stats_by_record_id
