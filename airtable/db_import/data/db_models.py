@@ -133,11 +133,12 @@ class ProductsStats(Model):
 
     @staticmethod
     def save_from_airtable(products_stats_model: ProductsStatsModel):
+        store_code_model: StoreProductCode = StoreProductCode.get_by_id(products_stats_model.record_id)
         product_stats = ProductsStats.create(
             RecordID=products_stats_model.record_id,
             ProductCode=products_stats_model.product_code,
             Nom=products_stats_model.nom,
-            Dataset=products_stats_model.dataset,
+            Dataset=store_code_model.Product,
             StatutPhotoset=products_stats_model.statut_photoset,
             Thumbnail=products_stats_model.thumbnail
         )
