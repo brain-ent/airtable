@@ -1,0 +1,35 @@
+{
+  "airtable_configuration": {
+    "api_key": "patflvfFsXWmumFpe.c4cafa50ff78810253ea48a7ec3a2ea9f907f4b284bc9a0e0da3604beb3a0ed4",
+    "database_id": "appA00G8PYsnmEYAi",
+    "products_stats_table_id": "tbl4PZ1wS2Kn7f2N8",
+    "products_table_id": "tblxphLXWXmNsIVuf",
+    "store_code_table_id": "tbl1lo3toyjXNM4KM"
+  },
+  "db_type": "SQLITE",
+  "logger_configuration": {
+    "log_dir": "/tmp/airtable/",
+    "log_level": "DEBUG"
+  },
+  "postgres_db_configuration": {
+    "db_host": "localhost",
+    "db_name": "airtable_cache",
+    "db_password": "postgres",
+    "db_port": 5433,
+    "db_user": "postgres"
+  },
+  "sqlite_db_configuration": {
+    "db_path": "/tmp/airtable/airtable.db"
+  },
+  "thumbnails_configuration": {
+    "clean_on_startup": true,
+    "format": "png",
+    "image_links_by_store_code": "/tmp/airtable/pics-by-store-code",
+    "resized_images_dir_path": "/tmp/airtable/pics-by-dataset-code",
+    "size": [
+      300,
+      300
+    ],
+    "temp_loading_dir_path": "/tmp/airtable/temp"
+  }
+}
