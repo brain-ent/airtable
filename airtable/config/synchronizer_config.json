@@ -19,7 +19,7 @@
     "db_user": "postgres"
   },
   "sqlite_db_configuration": {
-    "db_path": "/tmp/airtable/airtable.db"
+    "db_path": "/tmp/airtable/productsynch.db"
   },
   "thumbnails_configuration": {
     "clean_on_startup": true,
