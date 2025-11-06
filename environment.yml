@@ -1,0 +1,14 @@
+name: airtable
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - airtable-python-wrapper==0.15.3
+      - certifi==2025.1.31
+      - charset-normalizer==3.4.1
+      - idna==3.10
+      - requests==2.32.3
+      - six==1.17.0
+      - urllib3==2.3.0

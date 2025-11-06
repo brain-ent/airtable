@@ -1,0 +1,13 @@
+{
+  "airtable": {
+    "base_id": "YOUR_BASE_ID",
+    "api_key": "YOUR_AIRTABLE_API_KEY",
+    "tables": {
+      "classes": "YOUR_CLASSES_TABLE_ID",
+      "products": "YOUR_PRODUCTS_TABLE_ID"
+    }
+  },
+  "sqlite": {
+    "db_name": "productsynch.db"
+  }
+}
